@@ -1,1 +1,204 @@
 # valentine-
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nikita ❤️ Valentine?</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      padding: 28px 22px;
+      border-radius: 24px;
+      text-align: center;
+      width: min(90vw, 420px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+    }
+
+    p {
+      margin: 0 0 20px;
+      font-size: 18px;
+    }
+
+    .arena {
+      position: relative;
+      height: 180px;
+    }
+
+    button {
+      border: none;
+      padding: 14px 22px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 999px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #yes {
+      background: #22c55e;
+      color: white;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.2s ease;
+    }
+
+    #no {
+      background: #ef4444;
+      color: white;
+      position: absolute;
+      left: 60%;
+      top: 60%;
+      transform: translate(-50%, -50%);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .overlay.show {
+      display: flex;
+    }
+
+    .memeBox {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 95vw;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    }
+
+    .memeBox img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      background: black;
+    }
+
+    .caption {
+      padding: 14px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -30px;
+      font-size: 22px;
+      animation: float 3s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      to {
+        transform: translateY(-120vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h1>Nikita, will you be my Valentine? 💘</h1>
+    <p>Choose wisely 😌</p>
+
+    <div class="arena" id="arena">
+      <button id="yes">Yes 💚</button>
+      <button id="no">No 💔</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="memeBox">
+      <img src="vijay-dance.gif" alt="Vijay Dancing">
+      <div class="caption">Too late 😌 you’re my Valentine now 💃🕺</div>
+    </div>
+  </div>
+
+  <script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const arena = document.getElementById("arena");
+    const overlay = document.getElementById("overlay");
+
+    let scale = 1;
+
+    function moveNo(x, y) {
+      const a = arena.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+
+      let dx = b.left + b.width / 2 - x;
+      let dy = b.top + b.height / 2 - y;
+      const len = Math.hypot(dx, dy) || 1;
+
+      dx /= len;
+      dy /= len;
+
+      let newLeft = (b.left - a.left) + dx * 120;
+      let newTop  = (b.top  - a.top ) + dy * 120;
+
+      newLeft = Math.max(10, Math.min(a.width  - b.width  - 10, newLeft));
+      newTop  = Math.max(10, Math.min(a.height - b.height - 10, newTop));
+
+      noBtn.style.left = newLeft + "px";
+      noBtn.style.top  = newTop  + "px";
+      noBtn.style.transform = "none";
+    }
+
+    arena.addEventListener("mousemove", e => moveNo(e.clientX, e.clientY));
+    arena.addEventListener("touchstart", e => {
+      const t = e.touches[0];
+      if (t) moveNo(t.clientX, t.clientY);
+    });
+
+    noBtn.addEventListener("click", e => {
+      e.preventDefault();
+      scale *= 1.3;
+      yesBtn.style.transform = `scale(${scale})`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      overlay.classList.add("show");
+      for (let i = 0; i < 20; i++) {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = "💖";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.animationDuration = 2 + Math.random() * 2 + "s";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 4000);
+      }
+    });
+  </script>
+
+</body>
+</html>
+
